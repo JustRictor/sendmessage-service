@@ -5,23 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Центрированная Форма</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='form_beauty.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <form class="form" method="post" action="/">
-            <h2>Введите данные</h2>
-            <input type="tel" id="phone" name="phone" placeholder="Введите номер телефона" required>
-
-            <input type="text" id="code" name="code" placeholder="Введите код" required>
-
+<div class="container">
+    <form class="form" method="post" action="/">
+        <h2>Введите данные</h2>
+        <input type="tel" id="phone" name="phone" placeholder="Введите номер телефона" required>
+        <input type="text" id="code" name="code" placeholder="Введите код" required>
+        <input type="text" id="apikey" name="apikey" placeholder="Введите api токен" required>
+        <div class="button-container">
             <button type="submit">Отправить</button>
-        </form>
-        <div class="output" id="output">
-            {% if phone and code %}
-                <p>Номер телефона: {{ phone }}</p>
-                <p>Код: {{ code }}</p>
-            {% endif %}
+            <button type="button" id="get-token">Получить новый токен</button>
         </div>
+    </form>
+    <div class="output" id="output">
     </div>
+</div>
+<!-- КОГДА БУДЕТ ГОТОВА НАСТИНА ЧАСТЬ ИСПОЛЬЗОВАТЬ ЭТО
+<script>
+        $(document).ready(function(){
+    $('#get-token').on('click', function() {
+        $.ajax({
+            url: 'http://docker-sendmessage-service:5000/get-api',
+            type: 'GET',
+            success: function(response) {
+                var api = response.api;
+                $.ajax({
+                    url: '/get-token',
+                    type: 'POST',
+                    data: JSON.stringify({api: api}),
+                    contentType: 'application/json',
+                    success: function(response) {
+                        $('#output').html('<p>Ваш токен: ' + response.token + '</p>');
+                    }
+                });
+            }
+        });
+    });
+});
+-->
+<script>
+$(document).ready(function(){
+    $('#get-token').on('click', function() {
+        // Фиктивное значение API ключа (заглушка)
+        var api = 'sample_api_key';
+        $.ajax({
+            url: '/get-token',
+            type: 'POST',
+            data: JSON.stringify({api: api}),
+            contentType: 'application/json',
+            success: function(response) {
+                $('#output').html('<p>Ваш токен: ' + response.token + '</p>');
+            }
+        });
+    });
+});
+
+
+</script>
 </body>
 </html>
+
