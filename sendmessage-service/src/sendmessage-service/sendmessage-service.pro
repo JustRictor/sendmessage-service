@@ -11,6 +11,8 @@ include($$PWD/message_sender/message_sender.pri) #сервис по отправ
 include($$PWD/logic_core/logic_core.pri)         #основная логика
 include($$PWD/logger/logger.pri)                 #логер
 
+INCLUDEPATH += .
+
 SOURCES += \
         main.cpp
 
