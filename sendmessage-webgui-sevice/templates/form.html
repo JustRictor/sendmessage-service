@@ -4,21 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Центрированная Форма</title>
-    <link rel="stylesheet" type="text/css" href="../static/form_beauty.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='form_beauty.css') }}">
 </head>
 <body>
     <div class="container">
-        <form class="form">
+        <form class="form" method="post" action="/">
             <h2>Введите данные</h2>
-            <input type="tel" id="phone" name="phone" placeholder="Номер телефона" required>
+            <input type="tel" id="phone" name="phone" placeholder="Введите номер телефона" required>
 
-            <input type="text" id="code" name="code" placeholder="Код" required>
+            <input type="text" id="code" name="code" placeholder="Введите код" required>
 
             <button type="submit">Отправить</button>
         </form>
         <div class="output" id="output">
-            <!-- Здесь будет отображаться текст -->
-            <p>Здесь будет сообщения из логов</p>
+            {% if phone and code %}
+                <p>Номер телефона: {{ phone }}</p>
+                <p>Код: {{ code }}</p>
+            {% endif %}
         </div>
     </div>
 </body>
