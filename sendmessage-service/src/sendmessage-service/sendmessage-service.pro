@@ -6,6 +6,11 @@ CONFIG += c++17 cmdline
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+include($$PWD/http_server/http_server.pri)       #http сервер
+include($$PWD/message_sender/message_sender.pri) #сервис по отправке сообщений
+include($$PWD/logic_core/logic_core.pri)         #основная логика
+include($$PWD/logger/logger.pri)                 #логер
+
 SOURCES += \
         main.cpp
 
