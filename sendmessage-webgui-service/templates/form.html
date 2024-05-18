@@ -22,6 +22,27 @@
     <div class="output" id="output">
     </div>
 </div>
+<script>
+    $(document).ready(function(){
+        $('#get-token').on('click', function() {
+            // Фиктивное значение API ключа (заглушка)
+            var api = 'sample_api_key';
+            $.ajax({
+                url: '/get-token',
+                type: 'POST',
+                data: JSON.stringify({api: api}),
+                contentType: 'application/json',
+                success: function(response) {
+                    $('#output').html('<p>Ваш токен: ' + response.token + '</p>');
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
+
+
 <!-- КОГДА БУДЕТ ГОТОВА НАСТИНА ЧАСТЬ ИСПОЛЬЗОВАТЬ ЭТО
 <script>
         $(document).ready(function(){
@@ -45,25 +66,3 @@
     });
 });
 -->
-<script>
-$(document).ready(function(){
-    $('#get-token').on('click', function() {
-        // Фиктивное значение API ключа (заглушка)
-        var api = 'sample_api_key';
-        $.ajax({
-            url: '/get-token',
-            type: 'POST',
-            data: JSON.stringify({api: api}),
-            contentType: 'application/json',
-            success: function(response) {
-                $('#output').html('<p>Ваш токен: ' + response.token + '</p>');
-            }
-        });
-    });
-});
-
-
-</script>
-</body>
-</html>
-
