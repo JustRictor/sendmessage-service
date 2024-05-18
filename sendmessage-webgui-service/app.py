@@ -8,6 +8,7 @@ app.secret_key = 'your_secret_key'
 ADMIN_USERNAME = 'admin'
 ADMIN_PASSWORD = 'password'
 
+# записываем сюда все ответы
 log = []
 
 RESPONSES = {
@@ -55,8 +56,8 @@ def admin_panel():
         r, time  = HTTPClient.client.send_data(api,phone,code)
         code = int(r.status_code)
         if code in RESPONSES:
-            print(RESPONSES[code])
-            print(time)
+            log.append([RESPONSES[code],time])
+            print(log)
         else:
             print(f'Код не нашел {code}')
 
