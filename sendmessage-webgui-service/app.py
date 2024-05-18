@@ -1,11 +1,28 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for, flash
 import requests
 
 app = Flask(__name__)
 
+app.secret_key = 'your_secret_key'
+ADMIN_USERNAME = 'admin'
+ADMIN_PASSWORD = 'password'
+
 
 @app.route('/', methods=['GET', 'POST'])
-def index():
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+            return redirect(url_for('admin_panel'))
+        else:
+            flash('Invalid credentials. Please try again.')
+    return render_template('login.html')
+
+
+
+@app.route('/admin-panel', methods=['GET', 'POST'])
+def admin_panel():
     if request.method == 'POST':
         phone = request.form['phone']  # Чтение из инпута телефона в переменную
         code = request.form['code']  # Чтение из инпута кода в переменную
