@@ -5,12 +5,6 @@
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
-
-    msend::MessageSender core;
-    core.sendMessage({
-        .phoneNum = 79818398770,
-        .message  = "check"
-    });
-  
+    HttpServer core;
     return a.exec();
 }

@@ -9,3 +9,8 @@ HttpServer::HttpServer(QObject *parent)
     });
     server->listen(QHostAddress::Any,5000);
 }
+
+void HttpServer::sendMessage(QString token, QString num, QString mess)
+{
+    ///\todo validate token
+}
