@@ -1,4 +1,4 @@
-
+QT += httpserver
 
 HEADERS += \
     $$PWD/http_server.hpp
