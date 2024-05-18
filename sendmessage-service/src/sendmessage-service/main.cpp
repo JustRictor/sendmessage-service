@@ -6,6 +6,6 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
 
     HttpServer core;
-
+  
     return a.exec();
 }
