@@ -1,0 +1,5 @@
+как собрать Docker image:
+    docker build . -t sendmessage-service-img
+
+как запустить:
+    docker run --rm -p "5000:5000" sendmessage-service-img
