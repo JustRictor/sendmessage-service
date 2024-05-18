@@ -50,11 +50,10 @@ def login():
 def admin_panel():
     if request.method == 'POST':
         # считывание из формы
-        phone = request.form['phone']
+        phone = '7' + request.form['clean_phone']
         code = request.form['code']
         api = request.form['apikey']
         # take_data = [phone, code, api]
-
         # запрос на отправку данных
         r, time = HTTPClient.client.send_data(api, phone, code)
         code = int(r.status_code)
