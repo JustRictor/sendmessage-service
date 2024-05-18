@@ -74,6 +74,6 @@ button:hover {
     min-height: 50px;
     color: #333;
     word-wrap: break-word;
-    max-height: 200px;
-    overflow-y: auto;
+    max-height: 200px; /* Устанавливаем максимальную высоту */
+    overflow-y: auto; /* Добавляем вертикальную прокрутку */
 }

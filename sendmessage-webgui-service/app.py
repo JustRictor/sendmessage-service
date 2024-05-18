@@ -19,6 +19,8 @@ RESPONSES = {
     500: 'Ошибка сервера',
     330: 'Номер телефона не распознан'
 }
+
+
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -26,6 +28,7 @@ def login_required(f):
             flash('Вам нужно войти, чтобы получить доступ к этой странице.')
             return redirect(url_for('login'))
         return f(*args, **kwargs)
+
     return decorated_function
 
 
@@ -50,19 +53,20 @@ def admin_panel():
         phone = request.form['phone']
         code = request.form['code']
         api = request.form['apikey']
-        #take_data = [phone, code, api]
+        # take_data = [phone, code, api]
 
         # запрос на отправку данных
-        r, time  = HTTPClient.client.send_data(api,phone,code)
+        r, time = HTTPClient.client.send_data(api, phone, code)
         code = int(r.status_code)
         if code in RESPONSES:
-            log.append([RESPONSES[code],time])
+            log.append([RESPONSES[code], time])
             print(log)
         else:
             print(f'Код не нашел {code}')
 
-        return render_template('form.html')
+        return render_template('form.html', log=log)
     return render_template('form.html')
+
 
 # получение токена от сервера
 @app.route('/get-token', methods=['POST'])

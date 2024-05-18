@@ -20,6 +20,13 @@
         </div>
     </form>
     <div class="output" id="output">
+        {% if log %}
+            <ul>
+                {% for entry in log %}
+                    <li>{{ entry[0] }} - {{ entry[1] }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
     </div>
 </div>
 <script>
@@ -41,28 +48,3 @@
 </script>
 </body>
 </html>
-
-
-<!-- КОГДА БУДЕТ ГОТОВА НАСТИНА ЧАСТЬ ИСПОЛЬЗОВАТЬ ЭТО
-<script>
-        $(document).ready(function(){
-    $('#get-token').on('click', function() {
-        $.ajax({
-            url: 'http://docker-sendmessage-service:5000/get-api',
-            type: 'GET',
-            success: function(response) {
-                var api = response.api;
-                $.ajax({
-                    url: '/get-token',
-                    type: 'POST',
-                    data: JSON.stringify({api: api}),
-                    contentType: 'application/json',
-                    success: function(response) {
-                        $('#output').html('<p>Ваш токен: ' + response.token + '</p>');
-                    }
-                });
-            }
-        });
-    });
-});
--->
