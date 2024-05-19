@@ -47,18 +47,15 @@ msend::ResponseAnsw msend::MessageSender::sendMessage(const Tdo &data)
     QByteArray response = reply->readAll();
     if(!replyTimer.isActive())
     {
-        qDebug() << "cannot connect";
         reply->abort();
         return ResponseAnsw::CannotConnect;
     }
     if(response.contains("success"))
     {
-        qDebug() << "success";
         return ResponseAnsw::Success;
     }
     else
     {
-        qDebug() << "failure";
         return ResponseAnsw::Failure;
     }
 }

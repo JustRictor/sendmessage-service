@@ -5,6 +5,7 @@
 #include <QHttpServer>
 #include "message_sender/message_sender.hpp"
 #include "logic_core/api_manage.hpp"
+#include "logger/console_logger.hpp"
 
 class HttpServer : public QObject
 {
@@ -12,11 +13,15 @@ class HttpServer : public QObject
 private:
     QHttpServer* server;
     msend::MessageSender sender;
-    ApiManage api;
+    api::ApiManage api;
+    ConsoleLogger* logger;
 public:
     explicit HttpServer(QObject *parent = nullptr);
 private:
     QHttpServerResponse sendMessage(const QHttpServerRequest& request);
+    QHttpServerResponse genToken(const QHttpServerRequest& request);
+    QHttpServerResponse getTokens(const QHttpServerRequest& request);
+    QHttpServerResponse delToken(const QHttpServerRequest& request);
 signals:
 };
 

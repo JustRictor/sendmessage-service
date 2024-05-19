@@ -9,14 +9,39 @@
 HttpServer::HttpServer(QObject *parent)
     : QObject{parent}
     , server(new QHttpServer(this))
+    , logger( &ConsoleLogger::getInstance() )
 {
-    server->route("/",[](){
-        return "hello world";
-    });
     server->route("/sendMessage",
                   QHttpServerRequest::Method::Post,
                   [this](const QHttpServerRequest& request){
+                      logger->log(
+                          QString("get request /sendMessage/%1").arg(QString(request.body()))
+                          );
                       return this->sendMessage(request);
+                  });
+    server->route("/genToken",
+                  QHttpServerRequest::Method::Get,
+                  [this](const QHttpServerRequest& request){
+                      logger->log(
+                          QString("get request /genToken/%1").arg(QString(request.body()))
+                          );
+                      return this->genToken(request);
+                  });
+    server->route("/getTokens",
+                  QHttpServerRequest::Method::Get,
+                  [this](const QHttpServerRequest& request){
+                      logger->log(
+                          QString("get request /getTokens/%1").arg(QString(request.body()))
+                          );
+                      return this->getTokens(request);
+                  });
+    server->route("/delToken",
+                  QHttpServerRequest::Method::Delete,
+                  [this](const QHttpServerRequest& request){
+                      logger->log(
+                          QString("get request /getTokens/%1").arg(QString(request.body()))
+                          );
+                      return this->delToken(request);
                   });
     server->listen(QHostAddress::Any,5000);
 }
@@ -58,7 +83,7 @@ QHttpServerResponse HttpServer::sendMessage(
         )
     {
         return QHttpServerResponse({},
-            "bad JSON values",
+            "Invalid JSON values",
             QHttpServerResponder::StatusCode::BadRequest
             );
     }
@@ -66,14 +91,14 @@ QHttpServerResponse HttpServer::sendMessage(
     ///проверка токена
     if( !api.isValid(json["token"].toString(), __FUNCTION__) )
         return QHttpServerResponse({},
-            "unauthorized",
+            "Unauthorized",
             QHttpServerResponder::StatusCode::BadRequest
             );
 
     ///валидация номера
     if ( MessageValidator::isValid(json["msg"].toString()) )
         return QHttpServerResponse({},
-            "phone not valid",
+            "Invalide phone",
             QHttpServerResponder::StatusCode::BadRequest
             );
 
@@ -94,10 +119,25 @@ QHttpServerResponse HttpServer::sendMessage(
             );
     case msend::ResponseAnsw::CannotConnect:
         return QHttpServerResponse({},
-            "cannot connect to modem",
+            "Cannot connect to modem",
             QHttpServerResponder::StatusCode::InternalServerError
             );
     }
 
+
+}
+
+QHttpServerResponse HttpServer::genToken(const QHttpServerRequest &request)
+{
+
+}
+
+QHttpServerResponse HttpServer::getTokens(const QHttpServerRequest &request)
+{
+
+}
+
+QHttpServerResponse HttpServer::delToken(const QHttpServerRequest &request)
+{
 
 }
