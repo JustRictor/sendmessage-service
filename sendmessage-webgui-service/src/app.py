@@ -109,20 +109,14 @@ if __name__ == '__main__':
     directory = 'log-data'
     file_path = os.path.join(directory, 'session_log.txt')
 
-    # Check if the directory exists
+    # Чекаем есть ли папка
     if not os.path.exists(directory):
         os.makedirs(directory)
-        print(f"Directory '{directory}' created.")
-    else:
-        print(f"Directory '{directory}' already exists.")
 
-    # Check if the file exists
+    # Чекаем есть ли файл
     if not os.path.isfile(file_path):
         with open(file_path, 'w') as file:
-            file.write('')  # Create an empty file
-        print(f"File '{file_path}' created.")
-    else:
-        print(f"File '{file_path}' already exists.")
+            file.write('')  # создаем пустой лог
 
     app.run(host='0.0.0.0', port=5000, debug=True)
 
