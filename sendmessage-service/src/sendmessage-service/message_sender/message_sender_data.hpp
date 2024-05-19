@@ -8,7 +8,7 @@ namespace msend
 
 struct Tdo
 {
-    qint64 phoneNum;
+    QString phoneNum;
     QString message;
 };
 

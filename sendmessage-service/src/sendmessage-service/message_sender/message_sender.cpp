@@ -15,14 +15,15 @@ msend::MessageSender::MessageSender(QObject *parent)
 
 msend::ResponseAnsw msend::MessageSender::sendMessage(const Tdo &data)
 {
+    qDebug() << data.phoneNum << data.message;
     QUrlQuery postData;
     QDateTime date{QDateTime::currentDateTime()};
     postData.addQueryItem("isTest", "false");
     postData.addQueryItem("goformId", "SEND_SMS");
     postData.addQueryItem("notCallback", "true");
-    postData.addQueryItem("Number", "+79216495428");
+    postData.addQueryItem("Number", data.phoneNum);
     postData.addQueryItem("sms_time",date.toString("yy;MM;dd;hh;mm;ss;+3"));
-    postData.addQueryItem("MessageBody", "003100320034");
+    postData.addQueryItem("MessageBody", data.message);
     postData.addQueryItem("ID", "-1");
     postData.addQueryItem("encode_type", "UNICODE");
 

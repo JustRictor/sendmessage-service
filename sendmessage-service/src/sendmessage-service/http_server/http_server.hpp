@@ -10,11 +10,15 @@ class HttpServer : public QObject
     Q_OBJECT
 private:
     QHttpServer* server;
-    MessageSender sender;
+    msend::MessageSender sender;
 public:
     explicit HttpServer(QObject *parent = nullptr);
 private:
-    void sendMessage(QString token, QString num, QString mess);
+    QHttpServerResponse sendMessage(
+        QString token,
+        QString num,
+        QString mess
+        );
 signals:
 };
 
