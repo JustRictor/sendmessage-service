@@ -1,0 +1,2 @@
+как собрать Docker image:
+    docker build . -t sendmessage-webgui-service-image

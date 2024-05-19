@@ -2,5 +2,4 @@
     docker build . -t sendmessage-service-image
 
 как запустить:
-    docker network create --driver=bridge --subnet=192.168.0.0/24 --gateway=192.168.0.1 modem-network 
-    docker run --rm -p "5000:5000" --name sendmessage-service-container --network=modem-network sendmessage-service-image
+    в корне проекта описан файл docker-compose.yml
