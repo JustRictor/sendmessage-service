@@ -9,7 +9,7 @@ class HTTPClient:
 
     # получаем токен
     def get_token(self):
-        token = str(requests.get(f'{self.URL}').text)
+        token = str(requests.get(f'{self.URL}token').text)
         return token
 
     # отправляем данные: токен, телефон и код
