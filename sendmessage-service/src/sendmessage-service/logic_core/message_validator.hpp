@@ -8,7 +8,7 @@ class MessageValidator : public QObject
     Q_OBJECT
 public:
     explicit MessageValidator(QObject *parent = nullptr);
-
+    static bool isValid(QString const& number);
 signals:
 };
 
