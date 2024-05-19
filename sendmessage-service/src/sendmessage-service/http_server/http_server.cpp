@@ -2,6 +2,7 @@
 
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <QJsonArray>
 #include <QByteArray>
 
 #include "logic_core/message_validator.hpp"
@@ -35,15 +36,25 @@ HttpServer::HttpServer(QObject *parent)
                           );
                       return this->getTokens(request);
                   });
-    server->route("/delToken",
+    server->route("/delToken/<token>",
                   QHttpServerRequest::Method::Delete,
-                  [this](const QHttpServerRequest& request){
+                  [this](const QString& token, const QHttpServerRequest& request){
                       logger->log(
                           QString("get request /getTokens/%1").arg(QString(request.body()))
                           );
-                      return this->delToken(request);
+                      return this->delToken(request, token);
                   });
     server->listen(QHostAddress::Any,5000);
+}
+
+bool HttpServer::isAuthenticated(const QHttpServerRequest &request)
+{
+    auto authHeader = request.value("Authorization");
+    if (!authHeader.startsWith("Bearer ")) {
+        return false;
+    }
+    auto token = authHeader.mid(7);
+    return api::ApiManage::isValid(token);
 }
 
 QHttpServerResponse HttpServer::sendMessage(
@@ -57,7 +68,7 @@ QHttpServerResponse HttpServer::sendMessage(
     if (parseError.error != QJsonParseError::NoError) {
         return QHttpServerResponse({},
             "Invalid JSON",
-            QHttpServerResponder::StatusCode::BadRequest
+            QHttpServerResponse::StatusCode::BadRequest
             );
     }
 
@@ -73,33 +84,25 @@ QHttpServerResponse HttpServer::sendMessage(
     {
         return QHttpServerResponse({},
             "Invalid JSON",
-            QHttpServerResponder::StatusCode::BadRequest
+            QHttpServerResponse::StatusCode::BadRequest
             );
     }
 
-    if ( !(json.contains("token") && json["token"].isString()
-          && json.contains("phone") && json["phone"].isString()
+    if ( !(json.contains("phone") && json["phone"].isString()
           && json.contains("msg") && json["msg"].isString())
         )
     {
         return QHttpServerResponse({},
             "Invalid JSON values",
-            QHttpServerResponder::StatusCode::BadRequest
+            QHttpServerResponse::StatusCode::BadRequest
             );
     }
 
-    ///проверка токена
-    if( !api.isValid(json["token"].toString(), __FUNCTION__) )
-        return QHttpServerResponse({},
-            "Unauthorized",
-            QHttpServerResponder::StatusCode::BadRequest
-            );
-
     ///валидация номера
-    if ( MessageValidator::isValid(json["msg"].toString()) )
+    if ( !MessageValidator::isValid(json["phone"].toString()) )
         return QHttpServerResponse({},
             "Invalide phone",
-            QHttpServerResponder::StatusCode::BadRequest
+            QHttpServerResponse::StatusCode::BadRequest
             );
 
     msend::ResponseAnsw resp = sender.sendMessage({
@@ -110,34 +113,52 @@ QHttpServerResponse HttpServer::sendMessage(
     {
     case msend::ResponseAnsw::Success:
         return QHttpServerResponse(
-            QHttpServerResponder::StatusCode::Ok
+            QHttpServerResponse::StatusCode::Ok
             );
     case msend::ResponseAnsw::Failure:
         return QHttpServerResponse({},
             "Message not sended",
-            QHttpServerResponder::StatusCode::InternalServerError
+            QHttpServerResponse::StatusCode::InternalServerError
             );
     case msend::ResponseAnsw::CannotConnect:
         return QHttpServerResponse({},
             "Cannot connect to modem",
-            QHttpServerResponder::StatusCode::InternalServerError
+            QHttpServerResponse::StatusCode::InternalServerError
             );
     }
 
 
 }
 
-QHttpServerResponse HttpServer::genToken(const QHttpServerRequest &request)
+QHttpServerResponse HttpServer::genToken(const QHttpServerRequest &)
 {
-
+    return QHttpServerResponse({},
+        api.addToken().toUtf8(), ///\todo добавить хеширование
+        QHttpServerResponse::StatusCode::Ok
+        );
 }
 
-QHttpServerResponse HttpServer::getTokens(const QHttpServerRequest &request)
+QHttpServerResponse HttpServer::getTokens(const QHttpServerRequest &)
 {
-
+    QJsonArray jsonArray{};
+    QList<QString> tokens = api.getTokens();
+    for( const auto& item : tokens)
+        jsonArray.append(item);
+    return QHttpServerResponse({},
+        QJsonDocument(jsonArray).toJson(QJsonDocument::Compact),
+        QHttpServerResponse::StatusCode::Ok
+        );
 }
 
-QHttpServerResponse HttpServer::delToken(const QHttpServerRequest &request)
+QHttpServerResponse HttpServer::delToken(
+    const QHttpServerRequest &,
+    const QString& token
+    )
 {
-
+    if(api.delToken(token))
+        return QHttpServerResponse::StatusCode::Ok;
+    return QHttpServerResponse({},
+        "invalid token id",
+        QHttpServerResponse::StatusCode::BadRequest
+        );
 }

@@ -7,7 +7,7 @@ ConsoleLogger::ConsoleLogger(QObject *parent)
     , logFile("sendmessage-service.log")
 {
     if(!logFile.open(QFile::OpenModeFlag::Append))
-        qDebug() << QDateTime::currentDateTime().toString("dd:MM:yy hh:mm:ss -")
+        qInfo() << QDateTime::currentDateTime().toString("dd:MM:yy hh:mm:ss -")
                  << "cant create/open log file";
 }
 
@@ -17,6 +17,6 @@ void ConsoleLogger::log(const QString &message)
                           .arg( QDateTime::currentDateTime().toString("dd:MM:yy hh:mm:ss") )
                           .arg( message )
         ;
-    qDebug() << logmess;
+    qInfo() << logmess;
     logFile.write(logmess.toUtf8());
 }

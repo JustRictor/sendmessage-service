@@ -18,10 +18,15 @@ private:
 public:
     explicit HttpServer(QObject *parent = nullptr);
 private:
+    bool isAuthenticated(const QHttpServerRequest& request);
+
     QHttpServerResponse sendMessage(const QHttpServerRequest& request);
     QHttpServerResponse genToken(const QHttpServerRequest& request);
     QHttpServerResponse getTokens(const QHttpServerRequest& request);
-    QHttpServerResponse delToken(const QHttpServerRequest& request);
+    QHttpServerResponse delToken(
+        const QHttpServerRequest& request,
+        const QString& token
+        );
 signals:
 };
 
