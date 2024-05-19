@@ -59,7 +59,7 @@ HttpServer::HttpServer(QObject *parent)
                           );
                       return this->getTokens(request);
                   });
-    server->route("/delToken/<token>",
+    server->route("/delToken/<arg>",
                   QHttpServerRequest::Method::Delete,
                   [this](const QString& token, const QHttpServerRequest& request){
                       if( !isAuthenticated(request) )
@@ -67,7 +67,7 @@ HttpServer::HttpServer(QObject *parent)
                               QHttpServerResponse::StatusCode::Unauthorized
                               );
                       logger->log(
-                          QString("get request /getTokens/%1").arg(QString(request.body()))
+                          QString("get request /delToken/%1").arg(QString(request.body()))
                           );
                       return this->delToken(request, token);
                   });
