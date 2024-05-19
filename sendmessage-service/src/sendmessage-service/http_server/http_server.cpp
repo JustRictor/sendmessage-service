@@ -12,9 +12,24 @@ HttpServer::HttpServer(QObject *parent)
     , server(new QHttpServer(this))
     , logger( &ConsoleLogger::getInstance() )
 {
+    server->route("/ping",
+                  QHttpServerRequest::Method::Get,
+                  [this](const QHttpServerRequest& request){
+                      if( !isAuthenticated(request) )
+                          return QHttpServerResponse(
+                              QHttpServerResponse::StatusCode::Unauthorized
+                              );
+                      return QHttpServerResponse(
+                          QHttpServerResponse::StatusCode::Ok
+                          );
+                  });
     server->route("/sendMessage",
                   QHttpServerRequest::Method::Post,
                   [this](const QHttpServerRequest& request){
+                          if( !isAuthenticated(request) )
+                              return QHttpServerResponse(
+                                  QHttpServerResponse::StatusCode::Unauthorized
+                                  );
                       logger->log(
                           QString("get request /sendMessage/%1").arg(QString(request.body()))
                           );
@@ -23,6 +38,10 @@ HttpServer::HttpServer(QObject *parent)
     server->route("/genToken",
                   QHttpServerRequest::Method::Get,
                   [this](const QHttpServerRequest& request){
+                      if( !isAuthenticated(request) )
+                          return QHttpServerResponse(
+                              QHttpServerResponse::StatusCode::Unauthorized
+                              );
                       logger->log(
                           QString("get request /genToken/%1").arg(QString(request.body()))
                           );
@@ -31,6 +50,10 @@ HttpServer::HttpServer(QObject *parent)
     server->route("/getTokens",
                   QHttpServerRequest::Method::Get,
                   [this](const QHttpServerRequest& request){
+                      if( !isAuthenticated(request) )
+                          return QHttpServerResponse(
+                              QHttpServerResponse::StatusCode::Unauthorized
+                              );
                       logger->log(
                           QString("get request /getTokens/%1").arg(QString(request.body()))
                           );
@@ -39,6 +62,10 @@ HttpServer::HttpServer(QObject *parent)
     server->route("/delToken/<token>",
                   QHttpServerRequest::Method::Delete,
                   [this](const QString& token, const QHttpServerRequest& request){
+                      if( !isAuthenticated(request) )
+                          return QHttpServerResponse(
+                              QHttpServerResponse::StatusCode::Unauthorized
+                              );
                       logger->log(
                           QString("get request /getTokens/%1").arg(QString(request.body()))
                           );
