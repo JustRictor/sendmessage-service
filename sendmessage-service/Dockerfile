@@ -6,7 +6,7 @@ RUN pacman -Syu --noconfirm \
     && pacman -Sy --noconfirm clang base-devel \
     && pacman -U --noconfirm /docker-dep/*.pkg*
 RUN cd src/sendmessage-service \
-    && mkdir build && cd build \
+    && if [ ! -d build ]; then mkdir build; fi && cd build \
     && qmake .. && make \
     && mv sendmessage-service /
 CMD ./sendmessage-service

@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  mycontainer:
+    image: sendmessage-service-image
+    ports:
+      - "5000:5000"  # Пробрасываем порт 5000 из контейнера на хост
+    devices:
+      - /dev/bus/usb/001/003:/dev/bus/usb/001/003
+    networks:
+      myinternalnetwork:
+        ipv4_address: 172.18.0.2
+
+networks:
+  myinternalnetwork:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.18.0.0/24

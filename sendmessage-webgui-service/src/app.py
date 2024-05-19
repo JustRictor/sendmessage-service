@@ -7,9 +7,7 @@ import Logger
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
-ADMIN_USERNAME = 'admin'
-ADMIN_PASSWORD = 'password'
-
+TOKEN_ACCESS = '66c245eb9cf96e2cb886aa112745cb1ba0917fe8'
 # записываем сюда все ответы
 log = []
 
@@ -41,9 +39,8 @@ def login_required(f):
 def login():
     Logger.logger.write_log(f'поключился неизвестный пользователь {request.remote_addr}')
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+        tokenname = request.form['tokenname']
+        if tokenname == TOKEN_ACCESS:
             session['logged_in'] = True
             Logger.logger.write_log(f'пользователь авторизовался {request.remote_addr} login:{username}')
             return redirect(url_for('admin_panel'))
@@ -107,4 +104,4 @@ def get_tokens():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(host ='0.0.0.0', port = 5000, debug=True)

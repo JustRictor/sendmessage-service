@@ -9,11 +9,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.7/jquery.inputmask.min.js"></script>
 </head>
 <body>
-<div class="container">
-    <div class="output-container">
+<div class="main-container">
+    <div class="logs-container">
         <h2>Логи</h2>
-        <div class="output" id="left-output">
-            <!-- Вывод сообщений или данных слева -->
+        <div class="output" id="output">
             {% if log %}
             <ul>
                 {% for entry in log %}
@@ -41,7 +40,6 @@
     <div class="output-container">
         <h2>Токены</h2>
         <div class="output" id="right-output">
-            <!-- Вывод сообщений или данных справа -->
         </div>
     </div>
 </div>
