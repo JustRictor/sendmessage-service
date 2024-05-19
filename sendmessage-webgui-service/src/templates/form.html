@@ -27,18 +27,19 @@
             <h2>Введите данные</h2>
             <input type="tel" id="phone" name="phone" placeholder="Введите номер телефона" required>
             <input type="text" id="code" name="code" placeholder="Введите сообщение" required>
-            <input type="text" id="apikey" name="apikey" placeholder="Введите api токен" required>
+            <input type="text" id="apikey" name="apikey" placeholder="Введите api токен">
             <input type="hidden" id="clean_phone" name="clean_phone">
             <div class="button-container">
                 <button type="submit">Отправить</button>
-                <button type="button" id="get-token">Получить новый токен</button>
+                <button type="button" id="create-token">Создать новый токен</button>
+                <button type="button" id="delete-token">Удалить токен</button>
+                <button type="button" id="get-tokens">Вывести токены</button>
             </div>
         </form>
     </div>
-    <div class="tokens-container">
+    <div class="output-container">
         <h2>Токены</h2>
-        <div class="output" id="tokens-output">
-            <!-- Токены будут отображаться здесь -->
+        <div class="output" id="right-output">
         </div>
     </div>
 </div>
@@ -51,17 +52,46 @@
             $('#clean_phone').val(cleanPhone);  // Сохраняем чистый номер в скрытое поле
         });
 
-        $('#get-token').on('click', function() {
-            var api = 'sample_api_key';  // Фиктивное значение API ключа (заглушка)
+        $('#create-token').on('click', function() {
             $.ajax({
-                url: '/get-token',
-                type: 'POST',
-                data: JSON.stringify({api: api}),
-                contentType: 'application/json',
-                success: function(response) {
-                    $('#tokens-output').html('<p>Ваш токен: ' + response.token + '</p>');
+                url: '/create-token',
+                type: 'GET',
+                success: function(token) {
+                    $('#right-output').html('<p>Ваш токен: '+ token);
                 }
             });
+        });
+
+        $('#delete-token').on('click', function() {
+               var apikey = $('#apikey').val();  // Get the value of the apikey input field
+               $.ajax({
+                   url: '/delete-token',
+                   type: 'POST',
+                   contentType: 'application/json',
+                   data: JSON.stringify({ apikey: apikey }),  // Send the apikey value in the request body
+                   success: function(response) {
+                       $('#right-output').html('<p>Ваш токен удален</p>');
+                   },
+                   error: function(xhr, status, error) {
+                       console.error('Ошибка:', status, error);
+                       $('#right-output').html('<p>Ошибка при удалении токена</p>');
+                   }
+               });
+           });
+
+        $('#get-tokens').on('click', function() {
+            $.ajax({
+                url: '/get-tokens',
+                type: 'GET',
+                success: function(response) {
+                    $('#right-output').html('<p>' + response +'</p>');
+                }
+            });
+        });
+
+        $('#clear-log').on('click', function() {
+            $('#left-output').empty();  // Очищаем левый лог
+            $('#right-output').empty();  // Очищаем правый лог
         });
     });
 </script>

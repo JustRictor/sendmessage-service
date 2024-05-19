@@ -51,6 +51,8 @@ def login():
 
 
 @app.route('/admin-panel', methods=['GET', 'POST'])
+
+
 @login_required
 def admin_panel():
     if request.method == 'POST':
@@ -60,7 +62,7 @@ def admin_panel():
         api = request.form['apikey']
         # take_data = [phone, code, api]
         # запрос на отправку данных
-        r, time = HTTPClient.client.send_data(api, phone, code)
+        r, time = HTTPClient.client.send_data(phone, code)
         code = int(r.status_code)
         Logger.logger.write_log(f'отправлен запрос login:{username} {api} {phone} {code}')
         if code in RESPONSES:
@@ -75,16 +77,31 @@ def admin_panel():
 
 
 # получение токена от сервера
-@app.route('/get-token', methods=['POST'])
-def get_token():
+@app.route('/create-token', methods=['GET'])
+def create_token():
     Logger.logger.write_log(f'отправлен запрос на получение токена login:{username}')
-    token = HTTPClient.client.get_token()
-    Logger.logger.write_log(f'получен токен: {token}')
-    return jsonify({'token': token})
+    token = HTTPClient.client.create_token()
+    Logger.logger.write_log(f'создан токен: {token}')
+    return token, 200
+
+
+@app.route('/delete-token', methods=['POST'])
+def delete_token():
+    data = request.get_json()
+    token_to_delete = data.get("apikey")
+    print(token_to_delete)
+    Logger.logger.write_log(f'отправлен запрос на удаление токена login:{username}')
+    result = HTTPClient.client.delete_token(token_to_delete)
+    return result.text, 200
+
+
+@app.route('/get-tokens', methods=['GET'])
+def get_tokens():
+    Logger.logger.write_log(f'отправлен запрос на все токены login:{username}')
+    tokens = HTTPClient.client.get_tokens()
+    Logger.logger.write_log(f'токены получены')
+    return jsonify(tokens.text), 200
+
 
 if __name__ == '__main__':
-<<<<<<< HEAD:sendmessage-webgui-service/src/app.py
     app.run(host ='0.0.0.0', port = 5000, debug=True)
-=======
-    app.run(debug=True, host='0.0.0.0', port=5000)
->>>>>>> master:sendmessage-webgui-service/app.py

@@ -2,3 +2,5 @@ build
 .idea
 *.autosave*
 *.user*
+log-data
+__pycache__
