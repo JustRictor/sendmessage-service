@@ -15,7 +15,8 @@ class HTTPClient:
     # отправляем данные: токен, телефон и код
     def send_data(self, token, phone, msg):
         current_time = datetime.datetime.now()
-        response = requests.post(f'{self.URL}get-api',data={'token': token, 'phone':phone,'msg':msg})
+        jsondict = {'phone': phone, 'token':token, 'msg':msg}
+        response = requests.post(self.URL + 'sendMessage', json=jsondict)
         return response, current_time
 
 client = HTTPClient()
