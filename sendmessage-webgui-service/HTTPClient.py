@@ -15,7 +15,7 @@ class HTTPClient:
 
     # отправляем данные: токен, телефон и код
     def send_data(self, token, phone, msg):
-        current_time = datetime.datetime.now()
+        current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         jsondict = {'phone': phone, 'token':token, 'msg':msg}
         response = requests.post(self.URL + 'sendMessage', json=jsondict)
         return response, current_time
