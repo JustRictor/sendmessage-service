@@ -9,6 +9,7 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 ADMIN_USERNAME = 'admin'
 ADMIN_PASSWORD = 'password'
+
 # записываем сюда все ответы
 log = []
 
@@ -42,7 +43,6 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        time_start = datetime.datetime.now()
         if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
             session['logged_in'] = True
             Logger.logger.write_log(f'пользователь авторизовался {request.remote_addr} login:{username}')
@@ -65,7 +65,7 @@ def admin_panel():
         api = request.form['apikey']
         # take_data = [phone, code, api]
         # запрос на отправку данных
-        r, time = HTTPClient.client.send_data(api, phone, code)
+        r, time = HTTPClient.client.send_data(phone, code)
         code = int(r.status_code)
         Logger.logger.write_log(f'отправлен запрос login:{username} {api} {phone} {code}')
         if code in RESPONSES:
@@ -85,23 +85,25 @@ def create_token():
     Logger.logger.write_log(f'отправлен запрос на получение токена login:{username}')
     token = HTTPClient.client.create_token()
     Logger.logger.write_log(f'создан токен: {token}')
-    return jsonify({'token': token})
+    return token, 200
 
 
 @app.route('/delete-token', methods=['POST'])
 def delete_token():
+    data = request.get_json()
+    token_to_delete = data.get("apikey")
+    print(token_to_delete)
     Logger.logger.write_log(f'отправлен запрос на удаление токена login:{username}')
-    token = HTTPClient.client.delete_token()
-    Logger.logger.write_log(f'создан токен: {token}')
-    return jsonify({'token': token})
+    result = HTTPClient.client.delete_token(token_to_delete)
+    return result.text, 200
 
 
-@app.route('/get-tokens', methods=['POST'])
+@app.route('/get-tokens', methods=['GET'])
 def get_tokens():
     Logger.logger.write_log(f'отправлен запрос на все токены login:{username}')
-    token = HTTPClient.client.get_tokens()
+    tokens = HTTPClient.client.get_tokens()
     Logger.logger.write_log(f'токены получены')
-    return jsonify({'token': token})
+    return jsonify(tokens.text), 200
 
 
 if __name__ == '__main__':
