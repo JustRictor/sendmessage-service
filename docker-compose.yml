@@ -1,8 +1,9 @@
 version: '3'
 
 services:
-  mycontainer:
+  sendmessage-service:
     image: sendmessage-service-image
+    container_name: sendmessage-service-container
     ports:
       - "5000:5000"  # Пробрасываем порт 5000 из контейнера на хост
     devices:
@@ -10,6 +11,16 @@ services:
     networks:
       myinternalnetwork:
         ipv4_address: 172.18.0.2
+
+
+  sendmessage-webgui-service:
+    image: sendmessage-webgui-service-image
+    container_name: sendmessage-wubgui-service-container
+    ports:
+      - "80:5000"
+    networks:
+      myinternalnetwork:
+        ipv4_address: 172.18.0.3
 
 networks:
   myinternalnetwork:

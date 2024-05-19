@@ -4,7 +4,7 @@ import datetime
 import Logger
 class HTTPClient:
     # базовый URL
-    URL = 'http://192.168.31.17:5000/'
+    URL = 'http://sendmessage-service-container:5000/'
 
     admin_token = '66c245eb9cf96e2cb886aa112745cb1ba0917fe8'
     def __init__(self):

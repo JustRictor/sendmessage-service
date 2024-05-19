@@ -43,7 +43,7 @@ QString api::ApiManage::addToken()
 
 bool api::ApiManage::delToken(QString const& token)
 {
-    if(!tokens.contains(token) && token != INTERNAL_TOKEN)
+    if(!tokens.contains(token) || token == INTERNAL_TOKEN)
         return false;
     tokens.removeAll(token);
     logger->log(QString("erase token %1").arg(token));
