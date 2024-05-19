@@ -1,7 +1,9 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, session
 from functools import wraps
 
+import datetime
 import HTTPClient
+import Logger
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -20,7 +22,6 @@ RESPONSES = {
     330: 'Номер телефона не распознан'
 }
 
-
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -34,11 +35,15 @@ def login_required(f):
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
+    print(request.remote_addr)
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        time_start = datetime.datetime.now()
         if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
             session['logged_in'] = True
+            #log_text = f'под'
+            #Logger.logger.write_log(log_text)
             return redirect(url_for('admin_panel'))
         else:
             flash('Неправильные учетные данные. Попробуйте снова.')
