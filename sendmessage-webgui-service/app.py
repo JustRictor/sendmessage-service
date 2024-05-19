@@ -54,6 +54,8 @@ def login():
 
 
 @app.route('/admin-panel', methods=['GET', 'POST'])
+
+
 @login_required
 def admin_panel():
     if request.method == 'POST':

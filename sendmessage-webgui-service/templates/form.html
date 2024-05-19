@@ -11,7 +11,7 @@
 <body>
 <div class="container">
     <div class="output-container">
-        <h2>Лог</h2>
+        <h2>Логи</h2>
         <div class="output" id="left-output">
             <!-- Вывод сообщений или данных слева -->
             {% if log %}
@@ -33,7 +33,7 @@
             <div class="button-container">
                 <button type="submit">Отправить</button>
                 <button type="button" id="create-token">Создать новый токен</button>
-                <button type="button" id="delete-log">Удалить токен</button>
+                <button type="button" id="clear-log">Очистить лог</button>
             </div>
         </form>
     </div>
@@ -57,19 +57,35 @@
             $.ajax({
                 url: '/create-token',
                 type: 'GET'
+                success: function(response) {
+                    $('#right-output').html('<p>Ваш токен: ' + response + '</p>');
+                }
             });
         });
 
         $('#delete-token').on('click', function() {
+            var api = 'sample_api_key';  // Фиктивное значение API ключа (заглушка)
             $.ajax({
                 url: '/delete-token',
-                type: 'GET'
+                type: 'POST',
+                data: JSON.stringify({api: api}),
+                contentType: 'application/json',
+                success: function(response) {
+                    $('#right-output').html('<p>Ваш токен: ' + response.token + '</p>');
+                }
+            });
         });
 
         $('#get-tokens').on('click', function() {
+            var api = 'sample_api_key';  // Фиктивное значение API ключа (заглушка)
             $.ajax({
                 url: '/get-tokens',
-                type: 'GET'
+                type: 'POST',
+                data: JSON.stringify({api: api}),
+                contentType: 'application/json',
+                success: function(response) {
+                    $('#right-output').html('<p>Ваш токен: ' + response.token + '</p>');
+                }
             });
         });
 
