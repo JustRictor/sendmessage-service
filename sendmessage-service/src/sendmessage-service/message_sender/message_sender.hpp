@@ -22,8 +22,6 @@ public:
     explicit MessageSender(QObject *parent = nullptr);
 
     ResponseAnsw sendMessage(Tdo const& data);
-private slots:
-    void rep(QNetworkReply *reply);
 signals:
 };
 

@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QHttpServer>
 #include "message_sender/message_sender.hpp"
+#include "logic_core/api_manage.hpp"
 
 class HttpServer : public QObject
 {
@@ -11,14 +12,11 @@ class HttpServer : public QObject
 private:
     QHttpServer* server;
     msend::MessageSender sender;
+    ApiManage api;
 public:
     explicit HttpServer(QObject *parent = nullptr);
 private:
-    QHttpServerResponse sendMessage(
-        QString token,
-        QString num,
-        QString mess
-        );
+    QHttpServerResponse sendMessage(const QHttpServerRequest& request);
 signals:
 };
 

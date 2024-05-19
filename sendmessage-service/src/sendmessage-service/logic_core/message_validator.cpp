@@ -2,8 +2,9 @@
 
 MessageValidator::MessageValidator(QObject *parent)
     : QObject{parent}
-{
-    static bool isValid(QString number) {
-            return (number[0] == '7' || number[0] == '8') && (size(number) == 11)
-    }
+{}
+
+bool MessageValidator::isValid(QString const& number) {
+    return (number[0] == '7' || number[0] == '8')
+           && (number.length() == 11);
 }
