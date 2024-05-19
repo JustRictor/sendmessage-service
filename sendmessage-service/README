@@ -1,5 +1,6 @@
 как собрать Docker image:
-    docker build . -t sendmessage-service-img
+    docker build . -t sendmessage-service-image
 
 как запустить:
-    docker run --rm -p "5000:5000" sendmessage-service-img
+    docker network create --driver=bridge --subnet=192.168.0.0/24 --gateway=192.168.0.1 modem-network 
+    docker run --rm -p "5000:5000" --name sendmessage-service-container --network=modem-network sendmessage-service-image

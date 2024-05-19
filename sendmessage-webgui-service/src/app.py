@@ -83,4 +83,8 @@ def get_token():
     return jsonify({'token': token})
 
 if __name__ == '__main__':
+<<<<<<< HEAD:sendmessage-webgui-service/src/app.py
+    app.run(host ='0.0.0.0', port = 5000, debug=True)
+=======
     app.run(debug=True, host='0.0.0.0', port=5000)
+>>>>>>> master:sendmessage-webgui-service/app.py
