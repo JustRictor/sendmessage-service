@@ -5,6 +5,16 @@
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
+<<<<<<< HEAD
     HttpServer core;
+=======
+
+    msend::MessageSender core;
+    core.sendMessage({
+        .phoneNum = 79818398770,
+        .message  = "check"
+    });
+  
+>>>>>>> origin/addValidation
     return a.exec();
 }
