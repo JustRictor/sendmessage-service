@@ -36,14 +36,14 @@ QString api::ApiManage::addToken()
     while(tokens.contains(token))
         token = genToken();
     logger->log(QString("gen new token: %1").arg(token));
-    token.append(token);
+    tokens.append(token);
     updateTokens();
     return token;
 }
 
 bool api::ApiManage::delToken(QString const& token)
 {
-    if(!tokens.contains(token))
+    if(!tokens.contains(token) && token != INTERNAL_TOKEN)
         return false;
     tokens.removeAll(token);
     logger->log(QString("erase token %1").arg(token));

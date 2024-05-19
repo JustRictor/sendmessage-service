@@ -16,8 +16,11 @@ class ApiManage : public QObject
 {
     Q_OBJECT
 private:
+    static inline const QString INTERNAL_TOKEN{
+        "66c245eb9cf96e2cb886aa112745cb1ba0917fe8"
+    };
     static inline QList<QString> tokens{
-        "24d8389ec9fd8a2dbacd672122d13fbf112e01b0a164a993f5d46cf62bfcf0ad", ///<main admin token
+        INTERNAL_TOKEN, ///<main admin token
     };
     ConsoleLogger* logger;
     QFile tokensFile;
