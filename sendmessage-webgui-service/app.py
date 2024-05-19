@@ -78,12 +78,29 @@ def admin_panel():
 
 
 # получение токена от сервера
-@app.route('/get-token', methods=['POST'])
-def get_token():
+@app.route('/create-token', methods=['GET'])
+def create_token():
     Logger.logger.write_log(f'отправлен запрос на получение токена login:{username}')
-    token = HTTPClient.client.get_token()
-    Logger.logger.write_log(f'получен токен: {token}')
+    token = HTTPClient.client.create_token()
+    Logger.logger.write_log(f'создан токен: {token}')
     return jsonify({'token': token})
+
+
+@app.route('/delete-token', methods=['POST'])
+def delete_token():
+    Logger.logger.write_log(f'отправлен запрос на удаление токена login:{username}')
+    token = HTTPClient.client.delete_token()
+    Logger.logger.write_log(f'создан токен: {token}')
+    return jsonify({'token': token})
+
+
+@app.route('/get-tokens', methods=['POST'])
+def get_tokens():
+    Logger.logger.write_log(f'отправлен запрос на все токены login:{username}')
+    token = HTTPClient.client.get_tokens()
+    Logger.logger.write_log(f'токены получены')
+    return jsonify({'token': token})
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

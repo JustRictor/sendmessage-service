@@ -11,7 +11,7 @@
 <body>
 <div class="container">
     <div class="output-container">
-        <h2>Логи</h2>
+        <h2>Лог</h2>
         <div class="output" id="left-output">
             <!-- Вывод сообщений или данных слева -->
             {% if log %}
@@ -32,8 +32,8 @@
             <input type="hidden" id="clean_phone" name="clean_phone">
             <div class="button-container">
                 <button type="submit">Отправить</button>
-                <button type="button" id="get-token">Получить новый токен</button>
-                <button type="button" id="clear-log">Очистить лог</button>
+                <button type="button" id="create-token">Создать новый токен</button>
+                <button type="button" id="delete-log">Удалить токен</button>
             </div>
         </form>
     </div>
@@ -53,16 +53,23 @@
             $('#clean_phone').val(cleanPhone);  // Сохраняем чистый номер в скрытое поле
         });
 
-        $('#get-token').on('click', function() {
-            var api = 'sample_api_key';  // Фиктивное значение API ключа (заглушка)
+        $('#create-token').on('click', function() {
             $.ajax({
-                url: '/get-token',
-                type: 'POST',
-                data: JSON.stringify({api: api}),
-                contentType: 'application/json',
-                success: function(response) {
-                    $('#right-output').html('<p>Ваш токен: ' + response.token + '</p>');
-                }
+                url: '/create-token',
+                type: 'GET'
+            });
+        });
+
+        $('#delete-token').on('click', function() {
+            $.ajax({
+                url: '/delete-token',
+                type: 'GET'
+        });
+
+        $('#get-tokens').on('click', function() {
+            $.ajax({
+                url: '/get-tokens',
+                type: 'GET'
             });
         });
 
