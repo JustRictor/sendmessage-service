@@ -9,22 +9,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.7/jquery.inputmask.min.js"></script>
 </head>
 <body>
-<div class="main-container">
-    <div class="logs-container">
-        <h2>Логи</h2>
-        <div class="output" id="output">
-            {% if log %}
-            <ul>
-                {% for entry in log %}
-                <li>{{ entry[0] }} - {{ entry[1] }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-        </div>
-    </div>
     <div class="form-container">
         <form class="form" method="post" action="/admin-panel">
-            <h2>Введите данные</h2>
             <input type="tel" id="phone" name="phone" placeholder="Введите номер телефона" required>
             <input type="text" id="code" name="code" placeholder="Введите сообщение" required>
             <input type="text" id="apikey" name="apikey" placeholder="Введите api токен">
@@ -37,12 +23,25 @@
             </div>
         </form>
     </div>
-    <div class="output-container">
-        <h2>Токены</h2>
-        <div class="output" id="right-output">
+    <div class="main-container">
+        <div class="logs-container">
+            <h2>Логи</h2>
+            <div class="output" id="output">
+                {% if log %}
+                <div>
+                    {% for entry in log %}
+                    <p>{{ entry[0] }} - {{ entry[1] }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="output-container">
+            <h2>Токены</h2>
+            <div class="output" id="right-output">
+            </div>
         </div>
     </div>
-</div>
 <script>
     $(document).ready(function(){
         $('#phone').inputmask('+7 (999) 999-99-99');  // Настройка маски для поля телефона
@@ -70,11 +69,11 @@
                    contentType: 'application/json',
                    data: JSON.stringify({ apikey: apikey }),  // Send the apikey value in the request body
                    success: function(response) {
-                       $('#right-output').html('<p>' +response+ '</p>');
+                       $('#right-output').html('<p>Ваш токен удален</p>');
                    },
                    error: function(xhr, status, error) {
                        console.error('Ошибка:', status, error);
-                       $('#right-output').html('<p>Ошибка' + status+ hrc +' при удалении токена' + error + '</p>');
+                       $('#right-output').html('<p>Ошибка при удалении токена</p>');
                    }
                });
            });
