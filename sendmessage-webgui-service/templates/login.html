@@ -10,10 +10,8 @@
 <div class="login-container">
     <h2>Вход для администратора</h2>
     <form method="POST">
-        <label for="username">Имя пользователя:</label>
-        <input type="text" id="username" name="username" required>
-        <label for="password">Пароль:</label>
-        <input type="password" id="password" name="password" required>
+        <label for="password">Токен:</label>
+        <input type="password" id="password" name="tokenname" required>
         <button type="submit">Войти</button>
     </form>
     {% with messages = get_flashed_messages() %}
