@@ -3,10 +3,12 @@
 #include <QNetworkReply>
 #include <QUrlQuery>
 #include <QEventLoop>
+#include <QTimer>
 
 msend::MessageSender::MessageSender(QObject *parent)
     : QObject{parent}
     , manager( new QNetworkAccessManager(this) )
+    , logger( &ConsoleLogger::getInstance() )
 {
     request.setUrl(URL);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "text/html");
@@ -34,18 +36,29 @@ msend::ResponseAnsw msend::MessageSender::sendMessage(const Tdo &data)
     postData.addQueryItem("encode_type", "UNICODE");
 
     QNetworkReply* reply = manager->post(request, postData.toString(QUrl::FullyEncoded).toUtf8());
-
+    QTimer replyTimer; replyTimer.setSingleShot(true);
     QEventLoop await;
     QObject::connect(reply,&QNetworkReply::finished,
                      &await,&QEventLoop::quit);
+    QObject::connect(&replyTimer,&QTimer::timeout,
+                     &await,&QEventLoop::quit);
+    replyTimer.start(1000);
     await.exec();
-    if (reply->error() == QNetworkReply::NoError) {
-        // Запрос выполнен успешно
-        QByteArray response = reply->readAll();
-        qDebug() << "Response:" << response;
-    } else {
-        // Произошла ошибка
-        qDebug() << "Error:" << reply->errorString();
+    QByteArray response = reply->readAll();
+    if(!replyTimer.isActive())
+    {
+        qDebug() << "cannot connect";
+        reply->abort();
+        return ResponseAnsw::CannotConnect;
     }
-    return ResponseAnsw::Success;
+    if(response.contains("success"))
+    {
+        qDebug() << "success";
+        return ResponseAnsw::Success;
+    }
+    else
+    {
+        qDebug() << "failure";
+        return ResponseAnsw::Failure;
+    }
 }

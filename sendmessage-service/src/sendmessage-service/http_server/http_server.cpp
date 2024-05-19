@@ -94,7 +94,7 @@ QHttpServerResponse HttpServer::sendMessage(
             );
     case msend::ResponseAnsw::CannotConnect:
         return QHttpServerResponse({},
-            "Cant connect to modem",
+            "cannot connect to modem",
             QHttpServerResponder::StatusCode::InternalServerError
             );
     }

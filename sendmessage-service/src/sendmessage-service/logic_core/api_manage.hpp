@@ -10,12 +10,16 @@ class ApiManage : public QObject
 {
     Q_OBJECT
 private:
-    QHash<QString, QVector<QString>> tokens{
-        { "17a65071c496aff94e9ae6a296724beb", {"all"} },
+    static inline QHash<QString, QVector<QString>> groups{
+        { "admin", {"all"} },
+        { "user ", {"sendMessage"} },
+    };
+    static inline QHash<QString, QVector<QString>> tokens{
+        { "17a65071c496aff94e9ae6a296724beb", {"all"} }, ///<main admin token
     };
 public:
     explicit ApiManage(QObject *parent = nullptr);
-    bool isValid(QString const &token, QString const &find_method);
+    static bool isValid(QString const &token, QString const &find_method);
 signals:
 };
 

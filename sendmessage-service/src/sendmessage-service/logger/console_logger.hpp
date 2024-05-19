@@ -18,9 +18,7 @@ public:
     void log(QString const& message);
 
 private:
-    explicit ConsoleLogger(QObject *parent = nullptr)
-        : QObject{parent}
-    {}
+    explicit ConsoleLogger(QObject *parent = nullptr);
     explicit ConsoleLogger(ConsoleLogger& other) = delete;
     explicit ConsoleLogger(ConsoleLogger&& other) = delete;
     ConsoleLogger operator=(ConsoleLogger& other) = delete;

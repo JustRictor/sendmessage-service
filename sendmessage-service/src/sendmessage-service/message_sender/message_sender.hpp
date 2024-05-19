@@ -7,6 +7,7 @@
 #include <QNetworkRequest>
 
 #include "message_sender_data.hpp"
+#include "logger/console_logger.hpp"
 
 namespace msend
 {
@@ -18,6 +19,7 @@ private:
     static inline const QString URL{"http://192.168.0.1/goform/goform_set_cmd_process"};
     QNetworkAccessManager* manager;
     QNetworkRequest request;
+    ConsoleLogger* logger;
 public:
     explicit MessageSender(QObject *parent = nullptr);
 
