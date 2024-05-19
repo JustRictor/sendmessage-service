@@ -9,15 +9,18 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 ADMIN_USERNAME = 'admin'
 ADMIN_PASSWORD = 'password'
-
 # записываем сюда все ответы
 log = []
 
+username = ''
+
 RESPONSES = {
+    400: 'Токен не верен',
     401: 'Вы не авторизованы',
     402: 'Недостаточно средств',
     404: 'Страница не найдена',
-    200: 'Все хорошо',
+    200: 'ОК',
+    202: 'Принято',
     500: 'Ошибка сервера',
     330: 'Номер телефона не распознан'
 }
@@ -35,17 +38,17 @@ def login_required(f):
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
-    print(request.remote_addr)
+    Logger.logger.write_log(f'поключился неизвестный пользователь {request.remote_addr}')
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         time_start = datetime.datetime.now()
         if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
             session['logged_in'] = True
-            #log_text = f'под'
-            #Logger.logger.write_log(log_text)
+            Logger.logger.write_log(f'пользователь авторизовался {request.remote_addr} login:{username}')
             return redirect(url_for('admin_panel'))
         else:
+            Logger.logger.write_log(f'произведена попытка входа {request.remote_addr} login:{username}')
             flash('Неправильные учетные данные. Попробуйте снова.')
     return render_template('login.html')
 
@@ -62,11 +65,13 @@ def admin_panel():
         # запрос на отправку данных
         r, time = HTTPClient.client.send_data(api, phone, code)
         code = int(r.status_code)
+        Logger.logger.write_log(f'отправлен запрос login:{username} {api} {phone} {code}')
         if code in RESPONSES:
             log.append([RESPONSES[code], time])
-            print(log)
+            print(r.content)
+            Logger.logger.write_log(f'получен ответ: {r.content}')
         else:
-            print(f'Код не нашел {code}')
+            Logger.logger.write_log(f'получен не обрабатываемый ответ: {code}')
 
         return render_template('form.html', log=log)
     return render_template('form.html')
@@ -75,11 +80,10 @@ def admin_panel():
 # получение токена от сервера
 @app.route('/get-token', methods=['POST'])
 def get_token():
-    # data = request.get_json() не понятно пока куда это
-    # api = data.get('api')
+    Logger.logger.write_log(f'отправлен запрос на получение токена login:{username}')
     token = HTTPClient.client.get_token()
+    Logger.logger.write_log(f'получен токен: {token}')
     return jsonify({'token': token})
-
 
 if __name__ == '__main__':
     app.run(debug=True)
