@@ -30,13 +30,15 @@ QHttpServerResponse HttpServer::sendMessage(
     QJsonDocument jsonDoc = QJsonDocument::fromJson(request.body(), &parseError);
 
     if (parseError.error != QJsonParseError::NoError) {
-        return QHttpServerResponse(
+        return QHttpServerResponse({},
+            "Invalid JSON",
             QHttpServerResponder::StatusCode::BadRequest
             );
     }
 
     if (!jsonDoc.isObject()) {
-        return QHttpServerResponse(
+        return QHttpServerResponse({},
+            "Invalid JSON",
             QHttpServerResponse::StatusCode::BadRequest
             );
     }
@@ -44,7 +46,8 @@ QHttpServerResponse HttpServer::sendMessage(
     QJsonObject json = jsonDoc.object();
     if(json.isEmpty())
     {
-        return QHttpServerResponse(
+        return QHttpServerResponse({},
+            "Invalid JSON",
             QHttpServerResponder::StatusCode::BadRequest
             );
     }
@@ -54,28 +57,47 @@ QHttpServerResponse HttpServer::sendMessage(
           && json.contains("msg") && json["msg"].isString())
         )
     {
-        return QHttpServerResponse(
+        return QHttpServerResponse({},
+            "bad JSON values",
             QHttpServerResponder::StatusCode::BadRequest
             );
     }
 
     ///проверка токена
     if( !api.isValid(json["token"].toString(), __FUNCTION__) )
-        return QHttpServerResponse(
+        return QHttpServerResponse({},
+            "unauthorized",
             QHttpServerResponder::StatusCode::BadRequest
             );
 
     ///валидация номера
     if ( MessageValidator::isValid(json["msg"].toString()) )
-        return QHttpServerResponse(
+        return QHttpServerResponse({},
+            "phone not valid",
             QHttpServerResponder::StatusCode::BadRequest
             );
 
-    sender.sendMessage({
+    msend::ResponseAnsw resp = sender.sendMessage({
         .phoneNum = json["phone"].toString(),
         .message  = json["msg"].toString()
     });
-    return QHttpServerResponse(
-        QHttpServerResponder::StatusCode::Accepted
-        );
+    switch(resp)
+    {
+    case msend::ResponseAnsw::Success:
+        return QHttpServerResponse(
+            QHttpServerResponder::StatusCode::Ok
+            );
+    case msend::ResponseAnsw::Failure:
+        return QHttpServerResponse({},
+            "Message not sended",
+            QHttpServerResponder::StatusCode::InternalServerError
+            );
+    case msend::ResponseAnsw::CannotConnect:
+        return QHttpServerResponse({},
+            "Cant connect to modem",
+            QHttpServerResponder::StatusCode::InternalServerError
+            );
+    }
+
+
 }
