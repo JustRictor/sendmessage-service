@@ -6,7 +6,9 @@
     <title>Центрированная Форма</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='form_beauty.css') }}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.7/jquery.inputmask.min.js"></script>
 </head>
+
 <body>
 <div class="container">
     <form class="form" method="post" action="/admin-panel">
@@ -14,6 +16,8 @@
         <input type="tel" id="phone" name="phone" placeholder="Введите номер телефона" required>
         <input type="text" id="code" name="code" placeholder="Введите сообщение" required>
         <input type="text" id="apikey" name="apikey" placeholder="Введите api токен" required>
+        <input type="hidden" id="clean_phone" name="clean_phone">
+
         <div class="button-container">
             <button type="submit">Отправить</button>
             <button type="button" id="get-token">Получить новый токен</button>
@@ -21,15 +25,23 @@
     </form>
     <div class="output" id="output">
         {% if log %}
-            <ul>
-                {% for entry in log %}
-                    <li>{{ entry[0] }} - {{ entry[1] }}</li>
-                {% endfor %}
-            </ul>
+        <ul>
+            {% for entry in log %}
+            <li>{{ entry[0] }} - {{ entry[1] }}</li>
+            {% endfor %}
+        </ul>
         {% endif %}
     </div>
 </div>
 <script>
+    $(document).ready(function(){
+    $('#phone').inputmask('+7 (999) 999-99-99');  // Настройка маски для поля телефона
+
+    $('form').on('submit', function(){
+        var cleanPhone = $('#phone').inputmask('unmaskedvalue');  // Получаем чистый номер без маски
+        $('#clean_phone').val(cleanPhone);  // Сохраняем чистый номер в скрытое поле
+    });
+});
     $(document).ready(function(){
         $('#get-token').on('click', function() {
             // Фиктивное значение API ключа (заглушка)
