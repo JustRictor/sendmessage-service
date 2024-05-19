@@ -10,7 +10,7 @@
 <div class="login-container">
     <h2>Вход для администратора</h2>
     <form method="POST">
-        <input type="password" id="password" name="tokenname" placeholder="Введите токен" required>
+        <input type="text" id="password" name="tokenname" placeholder="Введите токен" required>
         <button type="submit">Войти</button>
     </form>
     {% with messages = get_flashed_messages() %}

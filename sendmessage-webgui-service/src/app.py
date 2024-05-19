@@ -4,11 +4,12 @@ from functools import wraps
 import datetime
 import HTTPClient
 import Logger
-
+import os
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 TOKEN_ACCESS = '66c245eb9cf96e2cb886aa112745cb1ba0917fe8'
 # записываем сюда все ответы
+
 log = []
 
 username = ''
@@ -104,4 +105,18 @@ def get_tokens():
 
 
 if __name__ == '__main__':
-    app.run(host ='0.0.0.0', port = 5000, debug=True)
+
+    directory = 'log-data'
+    file_path = os.path.join(directory, 'session_log.txt')
+
+    # Чекаем есть ли папка
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
+    # Чекаем есть ли файл
+    if not os.path.isfile(file_path):
+        with open(file_path, 'w') as file:
+            file.write('')  # создаем пустой лог
+
+    app.run(host='0.0.0.0', port=5000, debug=True)
+

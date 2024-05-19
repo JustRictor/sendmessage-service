@@ -51,7 +51,7 @@ class HTTPClient:
         response = requests.delete(f'{self.URL}delToken/{token}', headers=headers)
         print(response)
         # Выведите статус-код и содержимое ответа
-        #Logger.logger.write_log(f'удален токен: {self.admin_token}')
+        Logger.logger.write_log(f'удален токен: {self.admin_token}')
         return response
 
     def get_tokens(self):
