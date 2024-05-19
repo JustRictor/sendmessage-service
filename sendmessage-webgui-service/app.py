@@ -7,7 +7,7 @@ import Logger
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
-TOKEN_ACCESS = '24d8389ec9fd8a2dbacd672122d13fbf112e01b0a164a993f5d46cf62bfcf0ad'
+TOKEN_ACCESS = '66c245eb9cf96e2cb886aa112745cb1ba0917fe8'
 # записываем сюда все ответы
 log = []
 
