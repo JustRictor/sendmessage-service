@@ -70,11 +70,11 @@
                    contentType: 'application/json',
                    data: JSON.stringify({ apikey: apikey }),  // Send the apikey value in the request body
                    success: function(response) {
-                       $('#right-output').html('<p>Ваш токен удален</p>');
+                       $('#right-output').html('<p>' +response+ '</p>');
                    },
                    error: function(xhr, status, error) {
                        console.error('Ошибка:', status, error);
-                       $('#right-output').html('<p>Ошибка при удалении токена</p>');
+                       $('#right-output').html('<p>Ошибка' + status+ hrc +' при удалении токена' + error + '</p>');
                    }
                });
            });

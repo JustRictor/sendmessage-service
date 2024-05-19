@@ -92,7 +92,7 @@ def delete_token():
     print(token_to_delete)
     Logger.logger.write_log(f'отправлен запрос на удаление токена login:{username}')
     result = HTTPClient.client.delete_token(token_to_delete)
-    return result.text, 200
+    return result.content, result.status_code
 
 
 @app.route('/get-tokens', methods=['GET'])

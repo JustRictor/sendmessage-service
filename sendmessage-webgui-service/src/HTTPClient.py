@@ -46,10 +46,12 @@ class HTTPClient:
         }
         # Задайте заголовки запроса
         # Выполните GET запрос к серверу
-        response = requests.delete(f'{self.URL}delToken{token}', headers=headers)
-
+        print(token)
+        print(f'{self.URL}delToken/{token}')
+        response = requests.delete(f'{self.URL}delToken/{token}', headers=headers)
+        print(response)
         # Выведите статус-код и содержимое ответа
-        Logger.logger.write_log(f'удален токен: {self.admin_token}')
+        #Logger.logger.write_log(f'удален токен: {self.admin_token}')
         return response
 
     def get_tokens(self):
