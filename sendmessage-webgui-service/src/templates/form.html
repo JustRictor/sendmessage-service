@@ -16,10 +16,11 @@
             <input type="text" id="apikey" name="apikey" placeholder="Введите api токен">
             <input type="hidden" id="clean_phone" name="clean_phone">
             <div class="button-container">
-                <button type="submit">Отправить</button>
                 <button type="button" id="create-token">Создать новый токен</button>
                 <button type="button" id="delete-token">Удалить токен</button>
                 <button type="button" id="get-tokens">Вывести токены</button>
+                <button type="button" id="clear-log">Очистить лог</button>
+                <button type="submit">Отправить</button>
             </div>
         </form>
     </div>
@@ -43,6 +44,10 @@
         </div>
     </div>
 <script>
+    function appendLog(message) {
+    $('#output').append('<p>' + message + '</p>');
+    }
+
     $(document).ready(function(){
         $('#phone').inputmask('+7 (999) 999-99-99');  // Настройка маски для поля телефона
 
@@ -56,7 +61,8 @@
                 url: '/create-token',
                 type: 'GET',
                 success: function(token) {
-                    $('#right-output').html('<p>Ваш токен: '+ token);
+                  $('#right-output').html('<p>Ваш токен: ' + token + '</p>');
+                  appendLog('Токен создан: ' + token);
                 }
             });
         });
@@ -69,7 +75,8 @@
                    contentType: 'application/json',
                    data: JSON.stringify({ apikey: apikey }),  // Send the apikey value in the request body
                    success: function(response) {
-                       $('#right-output').html('<p>Ваш токен удален</p>');
+                     $('#right-output').html('<p>Ваш токен удален</p>');
+                     appendLog('Токен удален: ' + apikey);
                    },
                    error: function(xhr, status, error) {
                        console.error('Ошибка:', status, error);
@@ -89,9 +96,9 @@
         });
 
         $('#clear-log').on('click', function() {
-            $('#left-output').empty();  // Очищаем левый лог
-            $('#right-output').empty();  // Очищаем правый лог
-        });
+          $('#output').empty();  // Очищаем левый лог
+          $('#right-output').empty();  // Очищаем правый лог
+      });
     });
 </script>
 </body>

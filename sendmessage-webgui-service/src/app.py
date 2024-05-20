@@ -1,18 +1,15 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, session
 from functools import wraps
 
-import datetime
 import HTTPClient
 import Logger
 import os
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'
-TOKEN_ACCESS = '66c245eb9cf96e2cb886aa112745cb1ba0917fe8'
+
 # записываем сюда все ответы
 
 log = []
 
-username = ''
 
 RESPONSES = {
     400: 'Токен не верен',
@@ -38,12 +35,17 @@ def login_required(f):
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
-    Logger.logger.write_log(f'поключился неизвестный пользователь {request.remote_addr}')
+    Logger.logger.write_log(f'подключился неизвестный пользователь {request.remote_addr}')
+
     if request.method == 'POST':
         tokenname = request.form['tokenname']
-        if tokenname == TOKEN_ACCESS:
+        r = HTTPClient.client.pin_pong(tokenname)
+
+        print(r.status_code)
+        if r.status_code == 200:
             session['logged_in'] = True
             Logger.logger.write_log(f'пользователь авторизовался {request.remote_addr} login:{username}')
+            HTTPClient.client.set_admin_token(tokenname)
             return redirect(url_for('admin_panel'))
         else:
             Logger.logger.write_log(f'произведена попытка входа {request.remote_addr} login:{username}')
@@ -83,7 +85,7 @@ def create_token():
     Logger.logger.write_log(f'отправлен запрос на получение токена login:{username}')
     token = HTTPClient.client.create_token()
     Logger.logger.write_log(f'создан токен: {token}')
-    return token, 200
+    return jsonify({'message': f'Токен создан: {token}', 'token': token}), 200
 
 
 @app.route('/delete-token', methods=['POST'])
@@ -93,7 +95,7 @@ def delete_token():
     print(token_to_delete)
     Logger.logger.write_log(f'отправлен запрос на удаление токена login:{username}')
     result = HTTPClient.client.delete_token(token_to_delete)
-    return result.content, result.status_code
+    return jsonify({'message': f'Токен удален: {token_to_delete}'}), result.status_code
 
 
 @app.route('/get-tokens', methods=['GET'])
@@ -118,5 +120,6 @@ if __name__ == '__main__':
         with open(file_path, 'w') as file:
             file.write('')  # создаем пустой лог
 
+    app.secret_key = 'super secret key'
     app.run(host='0.0.0.0', port=5000, debug=True)
 
