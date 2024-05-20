@@ -5,8 +5,6 @@ import HTTPClient
 import Logger
 import os
 app = Flask(__name__)
-
-TOKEN_ACCESS = '66c245eb9cf96e2cb886aa112745cb1ba0917fe8'
 # записываем сюда все ответы
 
 log = []
