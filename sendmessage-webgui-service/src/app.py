@@ -5,11 +5,11 @@ import HTTPClient
 import Logger
 import os
 app = Flask(__name__)
-
 # записываем сюда все ответы
 
 log = []
 
+username = ''
 
 RESPONSES = {
     400: 'Токен не верен',
@@ -85,7 +85,7 @@ def create_token():
     Logger.logger.write_log(f'отправлен запрос на получение токена login:{username}')
     token = HTTPClient.client.create_token()
     Logger.logger.write_log(f'создан токен: {token}')
-    return jsonify({'message': f'Токен создан: {token}', 'token': token}), 200
+    return token, 200
 
 
 @app.route('/delete-token', methods=['POST'])
@@ -95,7 +95,7 @@ def delete_token():
     print(token_to_delete)
     Logger.logger.write_log(f'отправлен запрос на удаление токена login:{username}')
     result = HTTPClient.client.delete_token(token_to_delete)
-    return jsonify({'message': f'Токен удален: {token_to_delete}'}), result.status_code
+    return result, result.status_code
 
 
 @app.route('/get-tokens', methods=['GET'])

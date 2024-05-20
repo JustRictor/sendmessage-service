@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Центрированная Форма</title>
+    <title>Админ панель</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='form_beauty.css') }}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.7/jquery.inputmask.min.js"></script>
@@ -44,10 +44,6 @@
         </div>
     </div>
 <script>
-    function appendLog(message) {
-    $('#output').append('<p>' + message + '</p>');
-    }
-
     $(document).ready(function(){
         $('#phone').inputmask('+7 (999) 999-99-99');  // Настройка маски для поля телефона
 
@@ -61,8 +57,7 @@
                 url: '/create-token',
                 type: 'GET',
                 success: function(token) {
-                  $('#right-output').html('<p>Ваш токен: ' + token + '</p>');
-                  appendLog('Токен создан: ' + token);
+                     $('#output').html('<p>' + token +'</p>');
                 }
             });
         });
@@ -75,12 +70,11 @@
                    contentType: 'application/json',
                    data: JSON.stringify({ apikey: apikey }),  // Send the apikey value in the request body
                    success: function(response) {
-                     $('#right-output').html('<p>Ваш токен удален</p>');
-                     appendLog('Токен удален: ' + apikey);
+                      $('#output').html('<p>Токен удален</p>');
                    },
                    error: function(xhr, status, error) {
                        console.error('Ошибка:', status, error);
-                       $('#right-output').html('<p>Ошибка при удалении токена</p>');
+                       $('#output').html('<p>Ошибка при удалении токена</p>');
                    }
                });
            });
