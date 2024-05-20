@@ -10,6 +10,7 @@ app = Flask(__name__)
 
 log = []
 
+username = ''
 
 RESPONSES = {
     400: 'Токен не верен',
