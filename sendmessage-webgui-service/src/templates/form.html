@@ -69,12 +69,8 @@
                    type: 'POST',
                    contentType: 'application/json',
                    data: JSON.stringify({ apikey: apikey }),  // Send the apikey value in the request body
-                   success: function(response) {
-                      $('#output').html('<p>Токен удален</p>');
-                   },
-                   error: function(xhr, status, error) {
-                       console.error('Ошибка:', status, error);
-                       $('#output').html('<p>Ошибка при удалении токена</p>');
+                   success: function(token) {
+                      $('#output').html('<p>Токен ' + token+ ' удален</p>');
                    }
                });
            });

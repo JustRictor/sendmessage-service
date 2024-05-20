@@ -6,7 +6,7 @@ import Logger
 import os
 app = Flask(__name__)
 
-TOKEN_ACCESS = '66c245eb9cf96e2cb886aa112745cb1ba0917fe8'
+
 # записываем сюда все ответы
 
 log = []
@@ -97,7 +97,11 @@ def delete_token():
     print(token_to_delete)
     Logger.logger.write_log(f'отправлен запрос на удаление токена login:{username}')
     result = HTTPClient.client.delete_token(token_to_delete)
-    return result, result.status_code
+
+    if result.status_code == 200:
+        return token_to_delete, 200
+    else:
+        return RESPONSES[result.status_code], 200
 
 
 @app.route('/get-tokens', methods=['GET'])
