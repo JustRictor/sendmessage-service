@@ -6,7 +6,7 @@ class HTTPClient:
     # базовый URL
     URL = 'http://192.168.31.17:5000/'
 
-    admin_token = '66c245eb9cf96e2cb886aa112745cb1ba0917fe8'
+    admin_token = ''
     def __init__(self):
         return
 
@@ -66,5 +66,18 @@ class HTTPClient:
         print(f'Status Code: {response.status_code}')
         print(f'Response Text:{response.text}')
         return response
+
+
+    def pin_pong(self,token):
+        headers = {
+            'Authorization': f'Bearer {token}'
+        }
+        response = requests.get(f'{self.URL}ping', headers=headers)
+        return response
+
+    def set_admin_token(self,token):
+        self.admin_token = token
+
+
 client = HTTPClient()
 
