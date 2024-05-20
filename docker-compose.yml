@@ -2,6 +2,7 @@ version: '3'
 
 services:
   sendmessage-service:
+    build: sendmessage-service
     image: sendmessage-service-image
     container_name: sendmessage-service-container
     ports:
@@ -14,6 +15,7 @@ services:
 
 
   sendmessage-webgui-service:
+    build: sendmessage-webgui-service
     image: sendmessage-webgui-service-image
     container_name: sendmessage-wubgui-service-container
     ports:
